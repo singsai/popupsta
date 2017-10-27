@@ -24,6 +24,13 @@
     chrome.storage.sync.set(previousWindowSizes); //Store size settings based on url
   }
 
+  function showNotification(tabId) {
+    new Notification('', {
+      icon: 'icons/icon48.png',
+      body: `The popup is now ${Utility.modals[tabId].muted ? 'muted' : 'unmuted'}`
+    });
+  }
+
   chrome.browserAction.onClicked.addListener(function(tab) {
     var baseURL = new URL(tab.url).hostname;
 
@@ -59,6 +66,7 @@
 
       if (message.type === 'toggleMute') {
         Utility.toggleMute(tabId);
+        showNotification(tabId);
       }
 
       if (message.type === 'popDown' && Utility.isModal(tabId)) {
